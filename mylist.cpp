@@ -1,61 +1,345 @@
 /*
- * å®ç°ä¸€ä¸ªlistç±»å‘½åä¸ºMyListï¼Œå…¶åŠŸèƒ½ä¸pythonæ•°ç»„ç±»ä¼¼ã€‚å¯ä»¥ç”¨æ•°ç»„å®ç°ï¼Œä¹Ÿå¯ä»¥ç”¨é“¾è¡¨å®ç°ã€‚
- * å¿…é¡»ä½¿ç”¨template <class T>ï¼Œä¸å…è®¸ä½¿ç”¨<iostream>ä»¥å¤–çš„åº“ã€‚
- * éœ€è¦å®ç°çš„åŠŸèƒ½ä¸æµ‹è¯•ä»£ç è§ä¸‹ã€‚è¯·åŠ¡å¿…ææ¸…æ¥šæ¯ä¸€é¡¹çš„æ„ä¹‰ï¼Œæ¯”å¦‚ä»€ä¹ˆæ—¶å€™éœ€è¦ç”¨å‹å…ƒå‡½æ•°ä»€ä¹ˆæ—¶å€™éœ€è¦constä»€ä¹ˆæ—¶å€™éœ€è¦&ã€‚
- * å½“æŸäº›ç”±ç”¨æˆ·æ­£å¸¸æ“ä½œå¯èƒ½äº§ç”Ÿçš„run time errorï¼ˆå¦‚popä¸€ä¸ªç©ºæ•°ç»„ï¼Œæˆ–è®¿é—®ä¸€ä¸ªè¶…å‡ºä¸‹æ ‡çš„å…ƒç´ ï¼‰ï¼Œ
- * è¯·ä½¿ç”¨try-catch-throwå¤„ç†é”™è¯¯ã€‚
- * ä»¥ä¸‹ç±»å®šä¹‰ä¸ä¿è¯å®Œå…¨æ­£ç¡®ï¼Œè¯·æ ¹æ®å®é™…éœ€æ±‚ä¿®æ”¹ï¼Œä»¥å®ç°æ ·ä¾‹åŠŸèƒ½ä¸ºä¸»ã€‚
+ * ÊµÏÖÒ»¸ölistÀàÃüÃûÎªMyList£¬Æä¹¦ÄÜÓëpythonÊı×éÀàËÆ¡£¿ÉÒÔÓÃÊı×éÊµÏÖ£¬Ò²¿ÉÒÔÓÃÁ´±íÊµÏÖ¡£
+ * ±ØĞëÊ¹ÓÃtemplate <class T>£¬²»ÔÊĞíÊ¹ÓÃ<iostream>ÒÔÍâµÄ¿â¡£
+ * ĞèÒªÊµÏÖµÄ¹¦ÄÜÓë²âÊÔ´úÂë¼ûÏÂ¡£ÇëÎñ±Ø¸ãÇå³şÃ¿Ò»ÏîµÄÒâÒå£¬±ÈÈçÊ²Ã´Ê±ºòĞèÒªÓÃÓÑÔªº¯ÊıÊ²Ã´Ê±ºòĞèÒªconstÊ²Ã´Ê±ºòĞèÒª&¡£
+ * µ±Ä³Ğ©ÓÉÓÃ»§Õı³£²Ù×÷¿ÉÄÜ²úÉúµÄrun time error£¨ÈçpopÒ»¸ö¿ÕÊı×é£¬»ò·ÃÎÊÒ»¸ö³¬³öÏÂ±êµÄÔªËØ£©£¬
+ * ÇëÊ¹ÓÃtry-catch-throw´¦Àí´íÎó¡£
+ * ÒÔÏÂÀà¶¨Òå²»±£Ö¤ÍêÈ«ÕıÈ·£¬Çë¸ù¾İÊµ¼ÊĞèÇóĞŞ¸Ä£¬ÒÔÊµÏÖÑùÀı¹¦ÄÜÎªÖ÷¡£
  */
 
 /* 
- * æœ¬ç»ƒä¹ ä¸æ¶‰åŠåˆ°è™šç±»å’Œç±»ç»§æ‰¿ï¼Œä½†æ˜¯æœŸæœ«è€ƒè¯•æˆ‘å°±ä¸çŸ¥é“äº†ã€‚å¦‚æœæœ‰æ—¶é—´å¯ä»¥ç”¨ä¹¦ä¸Šçš„shapeç±»æ¥ç»ƒä¹ ã€‚
+ * ±¾Á·Ï°²»Éæ¼°µ½ĞéÀàºÍÀà¼Ì³Ğ£¬µ«ÊÇÆÚÄ©¿¼ÊÔÎÒ¾Í²»ÖªµÀÁË¡£Èç¹ûÓĞÊ±¼ä¿ÉÒÔÓÃÊéÉÏµÄshapeÀàÀ´Á·Ï°¡£
  */
 
 #include<iostream>
-using namespace std;
+//using namespace std;
+
+template<class T>class MyList;
+template<class T> std::ostream & operator<< (std::ostream &os, const MyList<T> &obj);
+template<class T> MyList<T> operator + (const MyList<T> &l1, const MyList<T> &l2);
+template<class T> MyList<T> operator + (const MyList<T> &l1, const T &item);
+
+class OutOfRangeException{
+	public:
+		OutOfRangeException():message("index out of range"){}
+		const char *what()const{return message;}
+	private:
+		const char *message;
+};
+class PopEmptyListException{
+	public:
+		PopEmptyListException():message("attempted to pop an empty list"){}
+		const char *what()const{return message;}
+	private:
+		const char *message;
+}; 
+class NegativeSizeException{
+	public:
+		NegativeSizeException():message("list initialized with a negative number"){}
+		const char *what()const{return message;}
+	private:
+		const char *message;
+}; 
 
 template<class T>
 class MyList{
+	
+friend std::ostream & operator<< <T>(std::ostream &os, const MyList<T> &obj);//Èç¹ûTÊÇ¿ÉÒÔÖ±½ÓcoutµÄÀàµÄ»°£¨±ÈÈçint£©£¬°´PythonÊı×éµÄ¸ñÊ½Êä³öMyListÖĞµÄÃ¿Ò»¸öÔªËØ£¬ÀıÈç£º // [1, 2, 5, 4, 1]
+friend MyList operator + <T>(const MyList<T> &l1, const MyList<T> &l2); //ºÏ²¢Á½¸öMyList
+friend MyList operator + <T>(const MyList<T> &l1, const T &item); //Í¬push(T item)£¬µ«²»ĞŞ¸Äl1£¬·µ»ØÒ»¸öĞÂÊı×é
 private:
 	T *a;
 	int size;
-	void double_space();//æ•°ç»„å¤§å°ä¸å¤Ÿçš„æ—¶å€™å°†æ•°ç»„å¤§å°ç¿»å€çš„æ“ä½œã€‚
+	int capacity;
+	void resize(int goal);//Êı×é´óĞ¡²»¹»µÄÊ±ºò½«Êı×é´óĞ¡·­±¶µÄ²Ù×÷¡£
+	void quicksort(T a[],int low,int high);
 public:
 	MyList(){
-		size = 100;
-		a = new int [size];
+		size = 0;
+		capacity=100;
+		a = new T [capacity];
 	}
-	MyList(int num, const T &item);//å°†itemé‡å¤numæ¬¡å¡«å…¥æ•°ç»„ä¸­ã€‚
-	MyList(const MyList &l);//æ·±å¤åˆ¶å¦å¤–ä¸€ä¸ªMyListã€‚
-    MyList(T* arr, int len);//ä»¥arrçš„å‰lenä¸ªå…ƒç´ æ„é€ æ•°ç»„
-
-	void push(const T &item);//å°†itemæ·»åŠ åœ¨MyListæœ€åã€‚
-	T pop();//å°†MyListä¸­æœ€åä¸€ä¸ªå…ƒç´ åˆ é™¤ï¼Œå¹¶è¿”å›è¿™ä¸ªåˆ é™¤çš„å…ƒç´ ã€‚
-	void insert(int index, const T &item);//å°†itemæ’å…¥åˆ°placeå¤„ã€‚
-	void clean();//æ¸…ç©ºæ•°ç»„ã€‚
-	int get_size();//è¿”å›MyListä¸­å…ƒç´ çš„æ•°é‡ã€‚
-	void erase(int start, int end); //åˆ é™¤MyListä¸­ç¬¬startåˆ°ç¬¬endä½çš„å…ƒç´ ï¼ŒåŒ…æ‹¬ä¸¤è¾¹ã€‚
-	T get_item(int index);//è¿”å›ç¬¬indexä¸ªå…ƒç´ ã€‚
-	MyList get_item(int start, int end);//è¿”å›MyListä¸­ç¬¬startåˆ°ç¬¬endä½çš„å…ƒç´ ï¼ŒåŒ…æ‹¬ä¸¤è¾¹ã€‚æ­¤å¤„éœ€è¦åƒpythonä¸€æ ·æ¥å—è´Ÿæ•°ï¼Œå…·ä½“è§æµ‹è¯•ä»£ç ã€‚
-	int count(const T &item);//è¿”å›MyListä¸­å’Œitemç›¸ç­‰çš„å…ƒç´ çš„ä¸ªæ•°ã€‚
-	void remove(const T &item);//åˆ é™¤MyListä¸­ç¬¬ä¸€ä¸ªå’Œitemç›¸ç­‰çš„å…ƒç´ ã€‚
-
-
-	friend MyList operator + (const MyList &l1, const MyList &l2); //åˆå¹¶ä¸¤ä¸ªMyList
-    friend MyList operator + (const MyList &l1, const T &item); //åŒpush(T item)ï¼Œä½†ä¸ä¿®æ”¹l1ï¼Œè¿”å›ä¸€ä¸ªæ–°æ•°ç»„
-	MyList &operator = (const MyList &l);//èµ‹å€¼
-	MyList &operator += (const T &item);//åŒpush(T item)
-	MyList &operator += (const MyList &l);//å°†ä¸€ä¸ªMyListåŠ å…¥åˆ°æœ¬ä¸ªMyListä¹‹åã€‚
-	T &operator [](int index);//è¿”å›ç¬¬indexä¸ªå…ƒç´ ã€‚
-	friend ostream & operator<<(ostream &os, const MyList &obj);//å¦‚æœTæ˜¯å¯ä»¥ç›´æ¥coutçš„ç±»çš„è¯ï¼ˆæ¯”å¦‚intï¼‰ï¼ŒæŒ‰Pythonæ•°ç»„çš„æ ¼å¼è¾“å‡ºMyListä¸­çš„æ¯ä¸€ä¸ªå…ƒç´ ï¼Œä¾‹å¦‚ï¼š
-    // [1, 2, 5, 4, 1]
-
-	void sort(bool less=true);//å®ç°ä¸€ä¸ªå¿«é€Ÿæ’åºæˆ–å½’å¹¶æ’åºï¼Œå¯¹æ”¯æŒæ¯”è¾ƒè¿ç®—ç¬¦ï¼ˆ>=<ï¼‰çš„ç±»è¿›è¡Œæ’åºã€‚
-    // è‹¥less=trueï¼ŒæŒ‰ç…§ä»å°åˆ°å¤§æ’åˆ—ï¼Œå¦åˆ™æŒ‰ä»å¤§åˆ°å°æ’åˆ—
-	void reverse();//å°†MyListçš„å…ƒç´ å€’è¿‡æ¥ã€‚
-
+	MyList(int num, const T &item);//½«itemÖØ¸´num´ÎÌîÈëÊı×éÖĞ¡£
+	MyList(const MyList &l);//Éî¸´ÖÆÁíÍâÒ»¸öMyList¡£
+    MyList(T* arr, int len);//ÒÔarrµÄÇ°len¸öÔªËØ¹¹ÔìÊı×é
+	void push(const T &item);//½«itemÌí¼ÓÔÚMyList×îºó¡£
+	T pop();//½«MyListÖĞ×îºóÒ»¸öÔªËØÉ¾³ı£¬²¢·µ»ØÕâ¸öÉ¾³ıµÄÔªËØ¡£
+	void insert(int index, const T &item);//½«item²åÈëµ½place´¦¡£
+	void clean();//Çå¿ÕÊı×é¡£
+	int get_size()const;//·µ»ØMyListÖĞÔªËØµÄÊıÁ¿¡£
+	void erase(int start, int end); //É¾³ıMyListÖĞµÚstartµ½µÚendÎ»µÄÔªËØ£¬°üÀ¨Á½±ß¡£
+	T get_item(int index)const;//·µ»ØµÚindex¸öÔªËØ¡£
+	MyList get_item(int start, int end)const;//·µ»ØMyListÖĞµÚstartµ½µÚendÎ»µÄÔªËØ£¬°üÀ¨Á½±ß¡£´Ë´¦ĞèÒªÏñpythonÒ»Ñù½ÓÊÜ¸ºÊı£¬¾ßÌå¼û²âÊÔ´úÂë¡£
+	int count(const T &item)const;//·µ»ØMyListÖĞºÍitemÏàµÈµÄÔªËØµÄ¸öÊı¡£
+	void remove(const T &item);//É¾³ıMyListÖĞµÚÒ»¸öºÍitemÏàµÈµÄÔªËØ¡£
+	MyList &operator = (const MyList &l);//¸³Öµ
+	MyList &operator += (const T &item);//Í¬push(T item)
+	MyList &operator += (const MyList &l);//½«Ò»¸öMyList¼ÓÈëµ½±¾¸öMyListÖ®ºó¡£
+	T &operator [](int index);//·µ»ØµÚindex¸öÔªËØ¡£
+	const T&operator [](int index)const;
+	void sort(bool less);//ÊµÏÖÒ»¸ö¿ìËÙÅÅĞò»ò¹é²¢ÅÅĞò£¬¶ÔÖ§³Ö±È½ÏÔËËã·û£¨>=<£©µÄÀà½øĞĞÅÅĞò¡£
+    // Èôless=true£¬°´ÕÕ´ÓĞ¡µ½´óÅÅÁĞ£¬·ñÔò°´´Ó´óµ½Ğ¡ÅÅÁĞ
+	void reverse();//½«MyListµÄÔªËØµ¹¹ıÀ´¡£
 	~MyList(){delete [] a;}
 };
+
+template <class T>
+void MyList<T>::resize (int goal = -1)
+{
+	T *tmp=a;
+	if(goal==-1)
+	capacity*=2;
+	else while(capacity<goal)
+	capacity*=2;
+	a=new T[capacity];
+	for(int i=0;i<size;++i)
+	a[i]=tmp[i];
+	delete [] tmp;
+	return;	
+}
+
+template <class T>
+MyList<T>::MyList(int num, const T &item)//½«itemÖØ¸´num´ÎÌîÈëÊı×éÖĞ¡£
+{
+	if(num<0)throw NegativeSizeException();	
+	capacity = 100;
+	size=num;
+	while(capacity<num)capacity*=2;	
+	a = new T [capacity];
+	for(int i=0;i<size;++i)
+	a[i]=item;
+}
+
+template <class T>
+MyList<T>::MyList(const MyList<T> &l)//Éî¸´ÖÆÁíÍâÒ»¸öMyList¡£
+{
+	capacity=l.capacity;
+	size=l.size;
+	a=new T [capacity];
+	for(int i=0;i<size;++i)
+	a[i]=l.a[i];	
+}
+
+template <class T>
+MyList<T>::MyList(T* arr, int len)//ÒÔarrµÄÇ°len¸öÔªËØ¹¹ÔìÊı×é
+{
+	if(len<0)throw NegativeSizeException();	
+	capacity=100;
+	size=len;
+	while(capacity<len)size*=2;
+	a=new T[capacity];
+	for(int i=0;i<size;++i)
+	a[i]=arr[i];	
+}
+
+template <class T>
+void MyList<T>::push(const T &item)//½«itemÌí¼ÓÔÚMyList×îºó¡£
+{
+	if(capacity==size)resize();
+	a[size++]=item;
+	return;	
+}
+
+template <class T>
+T MyList<T>::pop()//½«MyListÖĞ×îºóÒ»¸öÔªËØÉ¾³ı£¬²¢·µ»ØÕâ¸öÉ¾³ıµÄÔªËØ¡£
+{	
+	if(size==0)throw PopEmptyListException();
+	return a[--size];
+}
+
+template <class T>
+void MyList<T>::insert(int index, const T &item)//½«item²åÈëµ½place´¦¡£
+{
+	if(index<0||index>size)throw OutOfRangeException();	
+	if(capacity==size)resize();
+	for(int i=size;i>index;--i)
+	{
+		a[i]=a[i-1];
+	}
+	a[index]=item;
+	++size;
+}
+
+template <class T>
+void MyList<T>::clean()//Çå¿ÕÊı×é¡£
+{
+	for(int i=0;i<size;++i)
+	a[i].~T();
+	size=0;
+}
+
+template <class T>
+int MyList<T>::get_size()const//·µ»ØMyListÖĞÔªËØµÄÊıÁ¿¡£
+{
+	return size; 
+}
+
+template <class T>
+void MyList<T>::erase(int start, int end) //É¾³ıMyListÖĞµÚstartµ½µÚendÎ»µÄÔªËØ£¬°üÀ¨Á½±ß¡£
+{
+	if(start<0||end<0||start>=size||end>=size)throw OutOfRangeException();	
+	int len=end-start+1;
+	if(len<0)return;
+	for(int i=start;i<=end;++i)
+	{
+		a[i]=a[i+len];
+	}
+	size-=len;
+}
+
+template <class T>
+T MyList<T>::get_item(int index)const//·µ»ØµÚindex¸öÔªËØ¡£
+{
+	if(index<0||index>=size)throw OutOfRangeException();
+	return a[index];
+}
+
+template <class T>
+MyList<T> MyList<T>::get_item(int start, int end)const//·µ»ØMyListÖĞµÚstartµ½µÚendÎ»µÄÔªËØ£¬°üÀ¨Á½±ß¡£´Ë´¦ĞèÒªÏñpythonÒ»Ñù½ÓÊÜ¸ºÊı£¬¾ßÌå¼û²âÊÔ´úÂë¡£
+{
+	if(end<0)end+=size;
+	if(start<0)start+=size;
+	if(start<0||end<0||start>=size||end>=size)throw OutOfRangeException();
+	int len=end-start+1;
+	if(len<0)len=0;
+	MyList<T> B(a+start,len);
+	return B;
+}
+
+template <class T>
+int MyList<T>::count(const T &item)const//·µ»ØMyListÖĞºÍitemÏàµÈµÄÔªËØµÄ¸öÊı¡£
+{
+	int cnt=0;
+	for(int i=0;i<size;++i)
+	if(a[i]==item)++cnt;
+	return cnt;
+}
+
+template <class T>
+void MyList<T>::remove(const T &item)//É¾³ıMyListÖĞµÚÒ»¸öºÍitemÏàµÈµÄÔªËØ¡£
+{
+	int index;
+	for(index=0;index<size;++index)
+	if(a[index]==item)break;
+	if(index==size)return;
+	for(;index<size-1;++index)
+	a[index]=a[index+1];
+	--size;
+}
+
+template <class T>
+MyList<T> operator + (const MyList<T> &l1, const MyList<T> &l2) //ºÏ²¢Á½¸öMyList
+{
+	MyList<T> tmp;
+	tmp.resize(l1.size+l2.size);
+	tmp.size=l1.size+l2.size;
+	int i;
+	for(i=0;i<l1.size;++i)
+	tmp.a[i]=l1.a[i];
+	for(;i<l1.size+l2.size;++i)
+	tmp.a[i]=l2.a[i-l1.size];
+	return tmp;	
+}
+
+template<class T> 
+MyList<T> operator + (const MyList<T> &l1, const T &item) //Í¬push(T item)£¬µ«²»ĞŞ¸Äl1£¬·µ»ØÒ»¸öĞÂÊı×é
+{
+	MyList<T> tmp(l1);
+	tmp.resize(l1.size+1);
+	tmp.a[tmp.size]=item;
+	++tmp.size;
+	return tmp;	
+}
+
+template<class T>
+MyList<T> & MyList<T>::operator = (const MyList<T> &l)//¸³Öµ
+{
+	capacity=l.capacity;
+	size=l.size;
+	a=new T [capacity];
+	for(int i=0;i<size;++i)
+	a[i]=l.a[i];
+	return *this;	
+}
+
+template<class T>
+MyList<T> & MyList<T>::operator += (const T &item)//Í¬push(T item)
+{
+	if(size==capacity)resize();
+	a[size]=item;
+	++size;
+	return *this;
+}
+
+template<class T>
+MyList<T> &MyList<T>::operator += (const MyList &l)//½«Ò»¸öMyList¼ÓÈëµ½±¾¸öMyListÖ®ºó¡£
+{
+	resize(size+l.size);
+	for(int i=size;i<size+l.size;++i)
+	a[i]=l.a[i-size];
+	size+=l.size;
+	return *this;	
+}
+
+template<class T>
+T &MyList<T>::operator [](int index)//·µ»ØµÚindex¸öÔªËØ¡£
+{
+	if(index<0||index>=size)throw OutOfRangeException();	
+	return a[index];
+}
+
+template<class T>
+const T &MyList<T>::operator [](int index)const
+{
+	if(index<0||index>=size)throw OutOfRangeException();	
+	return a[index];
+}
+
+template <class T>
+std::ostream & operator<< (std::ostream &os, const MyList<T> &obj)//Èç¹ûTÊÇ¿ÉÒÔÖ±½ÓcoutµÄÀàµÄ»°£¨±ÈÈçint£©£¬°´PythonÊı×éµÄ¸ñÊ½Êä³öMyListÖĞµÄÃ¿Ò»¸öÔªËØ£¬ÀıÈç£º // [1, 2, 5, 4, 1]
+{
+	os<<'[';
+	int i;
+	for(i=0;i<obj.size-1;++i)
+	os<<obj.a[i]<<',';
+	if(obj.size>0)os<<obj.a[i];
+	os<<']';	
+	return os;
+}
+
+template <class T>
+void MyList<T>::quicksort(T a[],int low,int high)
+{
+	int mid,L=low,H=high;
+	if(low>=high)return;
+	T k=a[low];
+	do{
+		while(low<high&&a[high]>=k){--high;}
+		if(low<high){a[low]=a[high];++low;}
+		while(low<high&&a[low]<=k){++low;}
+		if(low<high){a[high]=a[low];--high;}
+	}while(low!=high);
+	a[low]=k;
+	mid=low;
+	quicksort(a,L,mid-1);
+	quicksort(a,mid+1,H);
+}
+
+template <class T>
+void MyList<T>::sort(bool less=true)//ÊµÏÖÒ»¸ö¿ìËÙÅÅĞò»ò¹é²¢ÅÅĞò£¬¶ÔÖ§³Ö±È½ÏÔËËã·û£¨>=<£©µÄÀà½øĞĞÅÅĞò¡£  
+  // Èôless=true£¬°´ÕÕ´ÓĞ¡µ½´óÅÅÁĞ£¬·ñÔò°´´Ó´óµ½Ğ¡ÅÅÁĞ
+{
+	quicksort(a,0,size-1);
+	if(!less)reverse();
+}
+
+template <class T>
+void MyList<T>::reverse()//½«MyListµÄÔªËØµ¹¹ıÀ´¡£
+{
+	MyList<T> tmp(*this);
+	for(int i=0;i<size;++i)
+	a[i]=tmp[size-i-1];	
+}
 
 int main(){
 	MyList<int> a, b;
@@ -68,24 +352,24 @@ int main(){
 	a.reverse(); // a = [15, 4, 2, 1, 0]
 	a += 12; // a = [15, 4, 2, 1, 0, 12]
 	for (i=0; i<a.get_size(); ++i)
-		cout<<a[i]<<endl;
-    b = a.get_item(4, -3); // b = [] *è‹¥start > endï¼Œè¿”å›ç©ºæ•°ç»„
+		std::cout<<a[i]<<std::endl;
+    b = a.get_item(4, -3); // b = [] *Èôstart > end£¬·µ»Ø¿ÕÊı×é
 	b = a.get_item(3, -1); // b = [1, 0, 12] 
 	a += b; // a = [15, 4, 2, 1, 0, 12, 1, 0, 12]
 	for (i=0; i<a.get_size(); ++i)
-		cout<<a.get_item(i)<<endl;
-	cout<<a.count(5)<<endl;
+		std::cout<<a.get_item(i)<<std::endl;
+	std::cout<<a.count(5)<<std::endl;
 	b.clean(); // b = []
-	cout<<b.get_size()<<endl;
+	std::cout<<b.get_size()<<std::endl;
 	a.erase(2, 5); // a = [15, 4, 0, 12]
 	b = a + a; // b = [15, 4, 0, 12, 15, 4, 0, 12]
 	b.insert(3, 116); // b = [15, 4, 0, 116, 12, 15, 4, 0, 12]
 	b.remove(4); // b = [15, 0, 116, ...]
-	cout<<b<<endl;
+	std::cout<<b<<std::endl;
 	MyList<double> c(10, 3.14);
 	for (i=0; i<100; ++i)
 		c.push(1.1*i);
-	cout<<c.get_item(100, 105)<<endl;
+	std::cout<<c.get_item(100, 105)<<std::endl;
 	
 	return 0;
 }
