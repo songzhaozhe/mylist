@@ -16,7 +16,7 @@
 
 template<class T>class MyList;
 template<class T> std::ostream & operator<< (std::ostream &os, const MyList<T> &obj);
-template<class T> MyList<T> operator + (const MyList<T> &l1, const MyList<T> &l2);
+//template<class T> MyList<T> operator + (const MyList<T> &l1, const MyList<T> &l2);
 template<class T> MyList<T> operator + (const MyList<T> &l1, const T &item);
 
 class OutOfRangeException{
